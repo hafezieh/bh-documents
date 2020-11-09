@@ -1,0 +1,56 @@
+#Replace "erp" with your application name
+image: 192.168.253.10:8082/openjdk:8-jdk-alpine
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  
+services:
+  - 192.168.253.10:8082/docker:dind
+  
+
+
+stages:
+  - build
+  - build-image
+  - deploy
+  - cleanup
+
+
+  
+build:
+  stage: build
+  script:
+    - chmod a+x mvnw
+    - './mvnw $MAVEN_CLI_OPTS package -Pprod -DskipTests -U'
+
+  artifacts:
+    expire_in: 10 mins 0 sec
+    paths:
+        - target/erp
+        - src/main/docker
+        
+build-image:
+  image: 192.168.253.10:8082/docker:latest
+  stage: build-image
+  script:
+        - cp -R target/erp src/main/docker/
+        - cd src/main/docker
+        - docker rm -f erp || true
+        - docker rmi -f 192.168.253.10:8083/erp:latest || true
+        - docker build -t 192.168.253.10:8083/erp:latest .
+
+deploy:
+  stage: deploy
+  script:
+    - docker rm -f erp || true
+    - cd src/main/docker
+    - docker-compose -f app-compose.yml up -d
+  tags: 
+    - shell
+
+cleanup_job:
+  stage: cleanup
+  script:
+    - echo "Cleaning up"
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"

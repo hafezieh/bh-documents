@@ -1,0 +1,30 @@
+version: '2.2'
+
+services:
+
+
+  filebeat:
+    build:
+      context: filebeat/
+    volumes:
+      # needed to access all docker logs (read only) :
+     - "/var/lib/docker/containers:/usr/share/dockerlogs/data:ro"
+      # needed to access additional informations about containers
+     - "/var/run/docker.sock:/var/run/docker.sock"
+####HFZ####
+
+    networks:
+      - elk
+#    depends_on:
+#      - elasticsearch
+#    links:
+#       - logstash
+    #cpu_count: 1
+    cpus: 0.5
+    mem_limit: 2G
+    
+####HFZ####
+networks:
+   elk:
+    driver: bridge
+###HFz#####

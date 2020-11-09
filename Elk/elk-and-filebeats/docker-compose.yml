@@ -1,0 +1,75 @@
+version: '2.2'
+
+services:
+
+  elasticsearch:
+    build:
+      context: elasticsearch/
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    cpus: 0.5
+    mem_limit: 2G
+
+  logstash:
+    build:
+      context: logstash/
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5044:5044"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    cpus: 0.5
+    mem_limit: 2G
+   # cpu_count: 1
+
+  kibana:
+    build:
+      context: kibana/
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config:ro
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+   # cpu_count: 1
+    cpus: 0.5
+    mem_limit: 2G
+
+#  filebeat:
+#    build:
+#      context: filebeat/
+#    volumes:
+#      # needed to access all docker logs (read only) :
+#     - "/var/lib/docker/containers:/usr/share/dockerlogs/data:ro"
+#      # needed to access additional informations about containers
+#     - "/var/run/docker.sock:/var/run/docker.sock"
+#    networks:
+#      - elk
+#    #depends_on:
+#     # - elasticsearch
+#    links:
+#       - logstash
+#    #cpu_count: 1
+#    cpus: 0.5
+#    mem_limit: 2G
+    
+
+networks:
+
+  elk:
+   driver: bridge

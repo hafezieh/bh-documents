@@ -1,0 +1,380 @@
+﻿author by hamed babakhani
+Install Oracle database 11g Release 2  on Linux 6.x 64bit
+
+This document is independent of linux distributed, means you can install it on all linux
+– Oracle Enterprise Linux 6.x
+– Red hat Enterprise Linux 6.x
+– CentOS Enterprise 6.x
+– Asian Linux
+
+******************************* step 0 ********************************************
+Linux partitioning:
+/boot 200 M
+/ 30 G
+swap 2 x RAM
+/oracle 10 ~ 15 G
+/fra 30 G
+/oradata remain of hard disk
+
+beter to user LVM
+
+******************************* step 1 ********************************************
+This article describes the installation of Oracle Database 11g Release 2 (11.2) (64-bit) on Oracle Linux 6 (64-bit). The article is based on a server installation with a minimum of 2G swap, with both SELinux and the firewall disabled. The following package groups were included for this installation.
+
+Base System > Base
+Base System > Compatibility libraries
+Base System > Debugging Tools -> glibc-utils-2
+Base System > Legacy UNIX compatibility -> ksh-2012
+Base System > Network file system client
+
+Desktops > Desktop
+Desktops > Desktop Debugging and Performance Tools
+Desktops > Desktop Platform
+Desktops > Fonts
+Desktops > General Purpose Desktop
+Desktops > Graphical Administration Tools
+Desktops > Input Methods
+Desktops > Legacy X Window System compatibillity -> libXmu, libXp, openmotif-2,
+openmotif22-2,xorg-x11-xdm, xterm-253
+
+Desktops > X Window System
+
+Development > Additional Development -> lib*-devel, openmotif-devel,
+unixODBC-devel, xorg-x11-proto-devel
+
+Development > Development Tools -> compat-gcc*, gcc*
+
+Servers > System administration tools
+Servers > Server Platform
+Applications > Internet Browser
+
+***************************** Step2 ************************************************
+Check OS Software Requirements: (root user)
+
+Install the following packages if they are not already present.
+
+insert CD centos or OL6 or OL7
+#mkdir /media/dvd
+#mount /dev/sr0 /media/dvd
+#cd /etc/yum.repos.d/
+#mkdir backup
+#mv ./* ./backup
+#touch dvd.repo
+#vi dvd.repo
+[dvd]
+name=file:///media/dvd
+enabled=1
+gpcheck=0
+#yum repolist
+
+yum -y install binutils
+yum -y install compat-libstdc++-33
+yum -y install elfutils-libelf
+yum -y install elfutils-libelf-devel
+yum -y install gcc
+yum -y install gcc-c++
+yum -y install glibc
+yum -y install kernel-devel
+yum -y install glibc-common
+yum -y install glibc-devel
+yum -y install glibc-headers
+yum -y install libaio
+yum -y install libaio-devel
+yum -y install libgcc
+yum -y install libstdc++
+yum -y install libstdc++-devel
+yum -y install make
+yum -y install numactl
+yum -y install numactl-devel
+yum -y install sysstat
+yum -y install unixODBC
+yum -y install unixODBC-devel
+yum -y install libcap-2*
+yum -y install compat-libcap1*
+
+yum -y install glibc.i686
+yum -y install glibc-devel.i686
+yum -y install libaio.i686
+yum -y install libaio-devel.i686
+yum -y install compat-libstdc++-33.i686
+yum -y install libgcc.i686
+yum -y install libstdc++.i686
+yum -y install libstdc++.i686
+yum -y install unixODBC.i686
+yum -y install unixODBC-devel.i686
+yum -y install chrony
+yum -y install pdksh
+
+— For checking Installed packeges:
+
+rpm -q –qf ‘%{NAME}-%{VERSION}-%{RELEASE} (%{ARCH})\n’ binutils \
+compat-libstdc++-33 \
+elfutils-libelf \
+elfutils-libelf-devel \
+gcc \
+gcc-c++ \
+glibc \
+glibc-common \
+glibc-devel \
+glibc-headers \
+pdksh \
+libaio \
+libaio-devel \
+libgcc \
+libstdc++ \
+libstdc++-devel \
+make \
+sysstat \
+unixODBC \
+unixODBC-devel \
+chrony
+
+******************************* step 3 **********************************
+run command below by root user, these command use beste performance.
+
+chkconfig atd off
+chkconfig cups off
+chkconfig netfs off
+chkconfig nfslock off
+
+/etc/init.d/atd stop
+/etc/init.d/cups stop
+/etc/init.d/netfs stop
+/etc/init.d/nfslock stop
+
+******************************* step 4 **********************************
+add line below to /etc/security/limits.conf in all nodes by root
+
+oracle soft nproc 16384
+oracle hard nproc 16384
+oracle soft nofile 65536
+oracle hard nofile 65536
+oracle soft stack 10240
+oracle hard stack 10240
+
+******************************* step 5 **********************************
+add following lines to /etc/pam.d/login in all nodes by root
+
+session required pam_limits.so
+
+******************************* step 6 **********************************
+add the following lines to the /etc/profile in all nodes by root
+
+if [ \$USER = “oracle” ] ; then
+if [ \$SHELL = “/bin/ksh” ]; then
+ulimit -p 16384
+ulimit -n 65536
+else
+ulimit -u 16384 -n 65536
+fi
+umask 022
+fi
+
+******************************* step 7 **********************************
+edit file /etc/sysctl.conf
+— kernel.shmmax = 1/2 RAM
+— kernel.shmall = kernel.shmmax / ( getconf PAGE_SIZE)
+ for example
+RAM=16G
+— kernel.shmmax = 16* 0.5 * 1024 * 1024 * 1024
+— kernel.shmall = kernel.shmmax / 4096
+
+fs.suid_dumpable = 1
+fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 2147483648
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048586
+
+Run the following command to change the current kernel parameters.
+
+/sbin/sysctl -p
+
+******************************* step 8 **********************************
+. You do not need to disable selinux, otherwise you want to install Oracle database 11g relase 2 ( 11.2.0.1 / 11.2.0.2)
+. Oracle support selinux after 11.2.0.3
+. Disable secure linux by editing the “/etc/selinux/config” file, making sure the SELINUX flag is set as follows.
+
+SELINUX=permissive
+
+Once the change is complete, restart the server.
+
+setenforce 0
+getenforce
+
+******************************* step 9 **********************************
+Change hostname:
+/etc/sysconfig/network
+
+hostname host_name
+
+The “/etc/hosts” file must contain a fully qualified name for the server.
+
+<IP-address> <fully-qualified-machine-name> <machine-name>
+
+For example.
+
+127.0.0.1 localhost.localdomain localhost
+
+192.168.251.134 dbserver dbserver.baharan
+
+******************************* step 10 **********************************
+stop NTP service in all nodes by root
+
+service ntpd stop
+chkconfig ntpd off
+mv /etc/ntp.conf /etc/ntp.conf.org
+rm /var/run/ntpd.pid
+
+if you are using NTP, you must add the “-x” option into the following line in the /etc/sysconfig/ntpd file.
+OPTIONS=”-x -u ntp:ntp -p /var/run/ntpd.pid”
+[root@dbserver etc]# service ntps restart
+
+————————————————————–————————————————————–—————————
+. open below file and add NTP server’s IP after line below
+. Please consider joining
+
+# vim /etc/chrony.conf
+
+# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+server 192.168.56.1 iburst
+
+# /etc/init.d/chronyd start
+# chkconfig chronyd on
+
+. For test
+# chronyc sources
+# chronyc tracking
+
+******************************* step 11 **********************************
+Before installing the software, complete the following procedure to verify that the user nobody exists on both Oracle RAC nodes:
+To determine if the user exists, enter the following command:
+
+[root@dbserver ~]# id nobody
+uid=99(nobody) gid=99(nobody) groups=99(nobody)
+
+If this command displays information about the nobody user, then you do not have to create that user.
+
+If the user nobody does not exist, then enter the following command to create it:
+
+[root@dbserver ~]# /usr/sbin/useradd nobody
+Repeat this procedure on all the other Oracle RAC nodes in the cluster
+
+******************************* step 12 **********************************
+
+create groups and user in all nodes by root
+
+[root@dbserver ~]#
+groupadd -g 501 oinstall
+groupadd -g 502 dba
+groupadd -g 503 oper
+
+useradd -u 501 -g oinstall -G dba,oper oracle
+
+[root@dbserver ~]# passwd oracle
+Changing password for user oracle.
+New UNIX password: xxxxxxxxxxx
+Retype new UNIX password: xxxxxxxxxxx
+passwd: all authentication tokens updated successfully.
+
+******************************* step 13 **********************************
+configure profile for oracle
+
+export ORACLE_SID=orcl
+export ORACLE_UNQNAME=orcl
+export JAVA_HOME=/usr/local/java
+export ORACLE_BASE=/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/db_1
+export ORACLE_TERM=xterm
+export NLS_DATE_FORMAT=”YYYY/MM/DD HH24:MI:SS”
+export ORA_NLS11=$ORACLE_HOME/nls/data
+PATH=.:${JAVA_HOME}/bin:${PATH}:$HOME/bin:$ORACLE_HOME/bin
+PATH=${PATH}:/usr/bin:/bin:/usr/bin/X11:/usr/local/bin
+export PATH
+
+LD_LIBRARY_PATH=$ORACLE_HOME/lib
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/oracm/lib
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib
+export LD_LIBRARY_PATH
+
+CLASSPATH=$ORACLE_HOME/JRE
+CLASSPATH=${CLASSPATH}:$ORACLE_HOME/jlib
+CLASSPATH=${CLASSPATH}:$ORACLE_HOME/rdbms/jlib
+CLASSPATH=${CLASSPATH}:$ORACLE_HOME/network/jlib
+export CLASSPATH
+
+export THREADS_FLAG=native
+export TEMP=/tmp
+export TMPDIR=/tmp
+
+umask 022
+
+******************************* step 14 **********************************
+
+[root@dbserver ~]#
+
+chown -R oracle:oinstall /oracle
+chown -R oracle:oinstall /oradata
+chown -R oracle:oinstall /fra
+
+chmod -R 755 /oracle
+chmod -R 755 /oradata
+chmod -R 755 /fra
+
+******************************* step **********************************
+Download Software
+
+Download the Oracle software from OTN or MOS depending on your support status.
+
+OTN: Oracle Database 11g Release 2 (11.2.0.1) Software (64-bit) – For unsupported installation.
+MOS: Oracle Database 11g Release 2 (11.2.0.3) Software (64-bit) – For supported installation.
+
+Unpack Files
+
+Unzip the files.
+
+# 11.2.0.1
+unzip linux.x64_11gR2_database_1of2.zip
+unzip linux.x64_11gR2_database_2of2.zip
+۴۰۹۶
+# 11.2.0.2
+unzip p10098816_112020_Linux-x86-64_1of7.zip
+unzip p10098816_112020_Linux-x86-64_2of7.zip
+
+# 11.2.0.3
+unzip p10404530_112030_Linux-x86-64_1of7.zip
+unzip p10404530_112030_Linux-x86-64_2of7.zip
+
+You should now have a single directory called “database” containing installation files.
+Hosts File
+
+Preinstallation Tasks for Oracle Grid Infrastructure for a Cluster
+copy p10098816_112020_Linux-x86-64_1of7.zip,
+p10098816_112020_Linux-x86-64_2of7.zip,
+
+in /software in node1
+
+uninstall all zip files.
+
+[root@dbserver ]# chmod 775 -R /software
+[root@dbserver ]# cd /software
+[root@dbserver software ]# unzip p10098816_112020_Linux-x86-64_1of7.zip
+[root@dbserver software ]# unzip p10098816_112020_Linux-x86-64_2of7.zip
+
+[root@dbserver ]# chown grid:oinstall -R /software/grid
+[root@dbserver ]# chown oracle:oinstall -R /software/database
+
+In graphical mode
+delete of files in /tmp in all nodes
+[root@dbserver ~]# cd /tmp
+[root@dbserver ~]# rm -rf *
+
+[root@dbserver ~]# xhost +
+[root@dbserver ~]# cd /software/database
+[root@dbserver ~]# ./runInstaller

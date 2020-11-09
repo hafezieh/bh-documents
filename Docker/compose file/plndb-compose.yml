@@ -1,0 +1,16 @@
+###Hafezieh###
+version: '2'
+services:
+  pln_db:
+    image: oracle12c-hfz:latest # e.g: registry.company.br/oracle/database:12.1.0.2-ee
+    container_name: pln_database
+    environment:
+      - ORACLE_SID=orcl
+      - ORACLE_PDB=test
+    volumes:
+      - ./oracle/oradata/PLN/app:/opt/oracle/app # persistent oracle database data.
+      - ./data-bridge/PLN:/data-bridge # just to have someplace to put data into the running container if needed
+    ports:
+      - 1531:1521
+      - 8081:8080
+      - 5501:5500

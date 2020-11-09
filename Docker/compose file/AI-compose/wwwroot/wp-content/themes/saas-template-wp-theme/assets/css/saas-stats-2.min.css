@@ -1,0 +1,89 @@
+.stats-wrapper.saas-stats-2 {
+    padding: 70px 0 125px
+}
+
+.stats-wrapper.saas-stats-2 .stat-title {
+    line-height: normal;
+    color: #000;
+    margin: 0 0 40px;
+    font-size: 26px
+}
+
+.saas-stats-2 .stat-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center
+}
+
+.saas-stats-2 .counters {
+    display: inline-block;
+    vertical-align: top;
+    flex: 18% 1 1;
+    padding: 0 30px;
+    margin: 0 0 20px 0
+}
+
+.saas-stats-2 .counters img {
+    margin-bottom: 15px
+}
+
+.saas-stats-2 .counters span.counter {
+    display: block;
+    font-size: 65px;
+    font-weight: 400;
+    line-height: 70px;
+    position: relative;
+    margin: 0;
+    white-space: nowrap
+}
+
+.saas-stats-2 .plus:after {
+    content: "+";
+    font-size: 28px
+}
+
+.saas-stats-2 .stat {
+    font-size: 21px;
+    font-weight: 300;
+    -webkit-font-smoothing: auto;
+    min-width: 150px;
+    display: block
+}
+
+.saas-stats-2 .percent:after {
+    content: "%"
+}
+
+@media(max-width:900px) {
+    .saas-stats-2 .counters {
+        padding: 0 15px
+    }
+}
+
+@media(max-width:550px) {
+    .saas-stats-2 .counters {
+        width: 100%;
+        margin: 0 0 50px
+    }
+
+    .saas-stats-2 .counters span.counter {
+        font-size: 50px;
+        line-height: 50px
+    }
+
+    .saas-stats-2 .percent:after {
+        font-size: 30px;
+        line-height: 35px
+    }
+
+    .saas-stats-2 .counters:last-of-type {
+        margin: 0
+    }
+}
+@media screen and (min-width: 580px) and (max-width: 768px) {
+    .saas-stats-2 .counters {
+         -webkit-box-flex: 1;
+             -ms-flex: 1 1 50%;
+                 flex: 1 1 50%; 
+    }
+}

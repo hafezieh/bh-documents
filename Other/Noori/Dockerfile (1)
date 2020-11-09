@@ -1,0 +1,52 @@
+#==============================================================#
+# WRITTEN BY AMIRHOSSEIN GHORAB
+# 10/21/2016 
+# Dockerfile
+#==============================================================#
+# BUILD COMMAND ==> sudo docker build -t app-name:v1 .
+# RUN COMMAND (background mode with -d flag enable)  ==> sudo docker run -d -p 8001:8001 app-name:v1
+#==============================================================#
+
+#CHANGE " ENV APP_NAME="accounting" " AND " COPY accounting /u01/oracle/weblogic/webapps/ " FOR YOR APPLICATION
+#==============================================================#
+
+# Pull base image (weblogic 12.2.1 Pre Build Domain)
+FROM 1221-domain 
+
+# Maintainer Me !!
+MAINTAINER AMIRHOSSEIN GHORAB <he.amirhossein@gmail.com>
+
+#APP_NAME=accounting
+#APP_NAME=amadProject
+#APP_NAME=shoppingOrganization
+#APP_NAME=ammunitionWeapon
+#APP_NAME=bazresiProject
+#APP_NAME=calendar
+#APP_NAME=evaluation
+#APP_NAME=hrmall
+#APP_NAME=transportation
+#APP_NAME=university-testing-system
+#APP_NAME=vaghef
+#APP_NAME=valifaghihProject
+#APP_NAME=tms
+
+# Define variables
+ENV APP_NAME="accounting" \
+    APP_PKG_LOCATION="/u01/oracle/weblogic/webapps/"
+
+RUN mkdir -p /u01/oracle/weblogic/webapps
+
+# Copy Scripts
+COPY app-scripts/* /u01/oracle/weblogic/webapps/
+COPY docker.properties /u01/oracle/weblogic/webapps/
+
+# Copy application files 
+COPY accounting /u01/oracle/weblogic/webapps/
+
+# Running Weblogic Scripting Tool (WLST)
+# First deploy an application and then config datasource
+RUN wlst -loadProperties /u01/oracle/weblogic/webapps/docker.properties /u01/oracle/weblogic/webapps/app-deploy.py && \
+    wlst -loadProperties /u01/oracle/weblogic/webapps/docker.properties /u01/oracle/weblogic/webapps/ds-deploy.py
+
+
+

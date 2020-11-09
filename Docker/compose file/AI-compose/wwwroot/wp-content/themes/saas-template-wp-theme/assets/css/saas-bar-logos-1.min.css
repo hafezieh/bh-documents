@@ -1,0 +1,128 @@
+.section.saas-bar-logo-1 {
+    padding: 60px 0
+}
+
+.page-center {
+    max-width: 1240px;
+    padding: 0 20px;
+    margin: 0 auto
+}
+
+.text-center {
+    text-align: center
+}
+
+.logos .logo {
+    margin: 20px 0
+}
+
+.logos .slick-track {
+    display: flex;
+    align-items: center
+}
+
+.logos .slick-slide img {
+    margin: 0 auto;
+    /* max-width: 250px; */
+    max-width: 500px;
+    display: block
+}
+
+.saas-bar-logo-1 h2 {
+    font-size: 18px;
+    font-weight: 600
+}
+
+@media(min-width:768px) {
+    .logos .logo {
+        padding: 0 15px
+    }
+}
+
+@media(max-width:767px) {
+    .logos .logo {
+        text-align: center
+    }
+}
+
+.saas-bar-logo-1 .slick-arrow {
+    top: 45%;
+    transform: translateY(-45%);
+    text-align: center
+}
+
+.saas-bar-logo-1 .slick-next {
+    right: 0;
+    width: auto;
+    height: auto
+}
+
+.saas-bar-logo-1 .slick-prev {
+    left: 0;
+    width: auto;
+    height: auto;
+    right: auto
+}
+
+.saas-bar-logo-1 .slick-prev img {
+    transform: rotate(180deg)
+}
+
+.saas-bar-logo-1 .slick-prev:before,
+.saas-bar-logo-1 .slick-next:before {
+    display: none
+}
+
+@media(max-width:768px) {
+    .saas-bar-logo-1 .slick-next {
+        right: 0
+    }
+
+    .saas-bar-logo-1.slick-prev {
+        left: 15px
+    }
+
+    .saas-bar-logo-1 .slick-arrow {
+        top: 35%;
+        transform: translateY(-35%)
+    }
+}
+
+@media(max-width:600px) {
+    .saas-bar-logo-1 .slick-arrow .desktop {
+        display: none
+    }
+
+    .saas-bar-logo-1 .slick-slide .img-slide {
+        padding: 0
+    }
+}
+
+@media(max-width:500px) {
+    .saas-bar-logo-1 .slick-arrow {
+        width: 54px;
+        height: 54px;
+        line-height: 50px
+    }
+
+    .saas-bar-logo-1 .slick-prev {
+        left: 0
+    }
+
+    .saas-bar-logo-1 .slick-next {
+        right: 0
+    }
+}
+
+@media(min-width:768px) {
+    .saas-bar-logo-1 .slick-track {
+        width: auto !important;
+        display: flex;
+        justify-content: space-between
+    }
+
+    .saas-bar-logo-1 .slick-track:before,
+    .saas-bar-logo-1 .slick-track:after {
+        display: none
+    }
+}

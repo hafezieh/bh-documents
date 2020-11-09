@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  sonarqube:
+    image: 192.168.253.10:8082/sonarqube
+    container_name: sonarqube
+    ports:
+      - "9090:9000"
+    tty: true
+    stdin_open: true
+
+    networks:
+      - sonarnet
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+      
+    volumes:
+      - /root/dockervolume/sonar/sonarqube/sonarqube_conf:/opt/sonarqube/conf
+      - /root/dockervolume/sonar/sonarqube/sonarqube_data:/opt/sonarqube/data
+      - /root/dockervolume/sonar/sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
+
+  db:
+    image: 192.168.253.10:8082/postgres
+    container_name: postgres-sonarqube
+    networks:
+      - sonarnet
+    environment:
+     - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - /root/dockervolume/sonar/postgresql:/var/lib/postgresql
+      # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
+      - postgresql_data:/var/lib/postgresql/data
+
+networks:
+  sonarnet:
+    driver: bridge
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  postgresql:
+  postgresql_data:

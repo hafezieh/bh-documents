@@ -1,0 +1,4 @@
+expdp system/sysadmin@192.168.251.141:1527/orcl directory=backup_dir dumpfile=EVAL_980202.dmp  schemas=EVAL
+
+exp hrm/hrm@192.168.251.147:1521/hrm.baharan file=D:\OracleBackup\Hrm\APP_META_INFOS_980202.dmp tables=APP_META_INFOS           
+

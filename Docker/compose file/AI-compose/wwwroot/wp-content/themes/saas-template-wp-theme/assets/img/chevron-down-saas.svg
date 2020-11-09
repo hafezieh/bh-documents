@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="9px" viewBox="0 0 11 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Chevron Left</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="CTAS" transform="translate(-1062.000000, -34.000000)" stroke="#269AE3" stroke-width="2.64">
+            <g id="NAV">
+                <g id="Group-22">
+                    <g id="ARROWS" transform="translate(444.000000, 24.000000)">
+                        <g id="Chevron-Left" transform="translate(623.500000, 14.000000) rotate(270.000000) translate(-623.500000, -14.000000) translate(620.500000, 9.500000)">
+                            <polyline id="Path-181-Copy" transform="translate(3.000000, 4.500000) rotate(-180.000000) translate(-3.000000, -4.500000) " points="0.75 0.642857143 5.25 4.60780932 0.75 8.35714286"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

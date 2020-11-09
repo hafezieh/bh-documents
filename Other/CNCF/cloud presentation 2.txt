@@ -1,0 +1,38 @@
+app definition and development :
+-Data Base
+-streaming & messaging
+-application deffinition & image build
+-CICD
+
+orchestration & management :
+-scheduling & orchestration
+-coordination & service discovery
+-remote procedure call
+-service proxy
+-api gateway  
+-service mesh
+
+runtime :
+-cloud native storage
+-container runtime
+-cloud native network
+
+provisioning :
+-automation & configuration
+-container registry
+-security & compliance
+-key management
+
+platform :
+-certified kubernetes - distribution
+-certified kubernetes - hosted
+-certified kubernetes - installer
+-PaaS/container service 
+
+observability & analysis :
+-monitoring
+-logging
+-tracing
+-chaos engeniring
+
+serverless

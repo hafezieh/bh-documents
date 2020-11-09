@@ -1,0 +1,106 @@
+/* ---- reset ---- */
+
+
+
+canvas {
+  display: block;
+  vertical-align: bottom;
+}
+
+.hero-1:after{
+  background: none !important;
+}
+
+.particles-js-canvas-el{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* ---- particles.js container ---- */
+
+#particles-js {
+  position: absolute;
+  width: 100%;
+  color: #030f4f;
+  background-color: #FDB23D;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  top: 0px;
+}
+
+
+@media only screen and (max-width:1110px) {
+  .saas-content-grid-4 .solutions-module .solution-item{
+    width: 30% !important;
+  }
+}
+
+@media only screen and (max-width:550px) {
+  .saas-content-grid-4 .solutions-module .solution-item{
+    width: 50% !important;
+  }
+}
+
+
+@media only screen and (max-width: 1200px) {
+  #particles-js {
+    height: 100%;
+  }
+}
+
+.saas-content-grid-4 .solutions-module .solution-item {
+  width: 13.33% ;
+  text-align: center;
+  margin: 0 0 60px;
+  padding: 0 15px;
+  max-width: none;
+}
+
+.solution-item-image {
+  width: 60px !important;
+  margin-bottom: 0px !important;
+  height: 90px !important;
+}
+
+.solution-item-title {
+  font-size: 14px !important;
+}
+/* ---- stats.js ---- */
+
+.count-particles{
+  background: #000022;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 80px;
+  color: #13E8E9;
+  font-size: .8em;
+  text-align: left;
+  text-indent: 4px;
+  line-height: 14px;
+  padding-bottom: 2px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+
+.js-count-particles{
+  font-size: 1.1em;
+  color: #030f4f;
+}
+
+#stats,
+.count-particles{
+  -webkit-user-select: none;
+}
+
+#stats{
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+}
+
+.count-particles{
+  border-radius: 0 0 3px 3px;
+}

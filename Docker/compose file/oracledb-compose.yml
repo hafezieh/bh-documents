@@ -1,0 +1,16 @@
+###Hafezieh###
+version: '2'
+services:
+  database:
+    image: oracle12c-hfz:latest # e.g: registry.company.br/oracle/database:12.1.0.2-ee
+    container_name: cicd_database_2
+    environment:
+      - ORACLE_SID=orcl
+      - ORACLE_PDB=test
+    volumes:
+      - ./oracle/oradata/RTSDB/app:/opt/oracle/app # persistent oracle database data.
+      - ./data-bridge/RTSDB:/data-bridge # just to have someplace to put data into the running container if needed
+    ports:
+      - 1530:1521
+      - 8080:8080
+      - 5500:5500
